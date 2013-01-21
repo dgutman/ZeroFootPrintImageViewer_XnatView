@@ -30,6 +30,9 @@ sudo apt-get install libdcmtk2
 
 
 
+
+
+
 #### TO DO ###
 ### need to add a bash script and/or config utilitity that creates all the requires directories
 ### whre the cache, dicom temp, and other files are stored..
@@ -44,3 +47,13 @@ mkdir dev_source_code
 
 #Depending on your level of apache sophistication, the web root can be anywhere, but for simplicity
 mkdir /var/www/xnatview
+
+
+
+
+#need to set up modpython
+   <Directory /var/www/xnatview_dev/python>
+        AddHandler mod_python .py
+        PythonHandler hello
+        PythonDebug On
+    </Directory>
