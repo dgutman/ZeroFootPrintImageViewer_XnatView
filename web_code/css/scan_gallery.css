@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+
+#scanGallery {
+   position: absolute;
+   width: 100%;
+   top: 1.5em;
+   bottom: 0;
+}
+
+#scanLink {
+   position: absolute;
+   top: 0;
+   height: 1.5em;
+   left: 0; right: 0;
+   overflow: hidden;
+   white-space: nowrap;
+}
+
+#scanLink, #scanLink a {
+   /* match theme colors */
+   background-color: black;
+   color: white;
+   font-weight: bold;
+}
+
+.galleria-info {
+   width: auto; /* remove 50% theme setting */
+   right: 15px; /* match left theme setting */
+}
