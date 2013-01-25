@@ -1,8 +1,42 @@
 <?php
-session_start();
+require('includes/common_top.php');
+require_once('includes/common.php');
 
-if( !empty($_GET['logout']) ) {
-   unset($_SESSION['xnatview.authinfo']);
+function verifyAuthentication($username, $pass, $server) {
+   $xnatview = getXnatViewOptions();
+   $auth_url = $xnatview['config']['authUrl'] . '?' . 
+      http_build_query(array('username' => $username, 'password' => $pass, 'instance' => $server));
+      
+   $cookie = session_name() . '=' . session_id();
+   $ch = curl_init($auth_url);
+   curl_setopt_array($ch, array(
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_MAXREDIRS => 3, // we're not actually expecting redirects now
+      CURLOPT_FAILONERROR => true,
+      CURLOPT_CONNECTTIMEOUT => 30, // 30 seconds
+      CURLOPT_COOKIE => $cookie,
+   ));
+
+   $result = curl_exec($ch);
+   if( $result === false ) {
+      return false;
+   }
+   $auth = json_decode($result, true);
+   if( $auth === null ) {
+      error_log('Unexpected authentication result: ' . $result);
+      return false;
+   }
+   
+   # pass on the cookie and remember it
+   list($pysessname, $pysessid) = $auth['session'];
+   setcookie($pysessname, $pysessid, 0, '/');
+   $_SESSION['xnatview.authinfo'] = array(
+      'pysessname' => $pysessname,
+      'pysessid' => $pysessid,
+   );
+   
+   return $auth['authenticated'];
 }
 
 // get recent servers or init defaults
@@ -32,13 +66,11 @@ if( $_POST['submitted'] ) {
       $_SESSION['xnatview.servers'] = $servers;
    }
    
-   // store auth info in the session
-   $_SESSION['xnatview.authinfo'] = array(
-      'user' => $_POST['username'],
-      'pass' => $_POST['password'],
-      'server' => $server
-   );
-   header('Location: ' . $target);
+   if( !verifyAuthentication($_POST['username'], $_POST['password'], $server) ) {
+      $error_msg = "Invalid login information.";
+   } else {
+      header('Location: ' . $target);
+   }
 }
 
 ?>
@@ -94,6 +126,10 @@ $data = json_encode($data);
    				data-dojo-type='dijit.form.Form'>
    			<input name='submitted' type='hidden' value='true' />
       		<div id='login_title'>XNAT View</div>
+      <?php 
+      if( $error_msg ) {
+         echo "<div style='color: red; font-weight: bold; margin: auto;'>$error_msg</div>\n"; 
+      }?>
       		<div id='form_box' data-dojo-type='dojox.layout.TableContainer'
       				data-dojo-props="cols:1, showLabels:true, labelWidth:40, customClass:'loginForm'">
 <!--      			<label for='username'>User:</label>-->

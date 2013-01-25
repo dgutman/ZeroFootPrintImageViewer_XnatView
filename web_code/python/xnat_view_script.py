@@ -19,7 +19,6 @@ def get_projects(req,username,password,instance):
             json_obj.append({"project_name":project, "status":"success"})
     except:
         json_obj = [{"status":"fail"}]
-        raise
     return json.dumps(json_obj)
 
 def get_subjects(req,username,password, instance,project_name):
@@ -144,7 +143,9 @@ def get_dicom_scans(req,username,password,instance ,project_name,subject_label,e
         
         xml_doc = make_xml(dicom_map, folder_id, thumbnail_loc, png_loc, xml_folder)
         
-
+    # compatibility with new format from xnatview_backend.py
+    xml_doc = xml_doc % {'host': 'http://cerebro.cci.emory.edu/XNATVIEW/'}
+    
     return xml_doc
 
 def make_xml(dicom_map,folder_id, thumbnail_loc, png_loc, xml_folder):

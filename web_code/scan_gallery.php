@@ -46,11 +46,14 @@ if( !$is_authorized ) {
 
 // hit our backend script to retrieve scan image info
 $get_scans_url = $xnatview['config']['dicomUrl'];
-$req_params = $xnatview['config']['authJson'];
+$req_params = array();
 $req_params['project_name'] = $project;
 $req_params['subject_label'] = $subject;
 $req_params['experiment_label'] = $experiment;
 $req_params['scan_id'] = $scan;
+
+$pycookie = $_SESSION['xnatview.authinfo']['pysessname'] . 
+   '=' . $_SESSION['xnatview.authinfo']['pysessid'];
 
 $get_scans_url .= '?' . http_build_query($req_params);
 
@@ -61,6 +64,7 @@ curl_setopt_array($ch, array(
  CURLOPT_MAXREDIRS => 3, // we're not actually expecting redirects now
  CURLOPT_FAILONERROR => true,
  CURLOPT_CONNECTTIMEOUT => 30, // 30 seconds
+ CURLOPT_COOKIE => $pycookie,
 ));
 
 $result = curl_exec($ch);

@@ -174,7 +174,6 @@ XnatView.prototype = {
       var setProjects = function(p) { self.setProjects(p); };
       $.ajax({
          url: xnatview.config.projectUrl,
-         data: xnatview.config.authJson,
          dataType: 'json',
          success: setProjects
       });
@@ -197,9 +196,7 @@ XnatView.prototype = {
    fetchSubjects: function(project) {
        this._clearSelects(["subjectSelect", "experimentSelect", "scanSelect"]);
        
-       // this makes a copy
-       var reqData = $.extend(true, {}, xnatview.config.authJson);
-       reqData.project_name = project;
+       var reqData = { project_name: project };
        
        var self = this;
        var setSubjects = function(s) { self.setSubjects(s); };
@@ -227,8 +224,7 @@ XnatView.prototype = {
    fetchExperiments: function(project, subject) {
       this._clearSelects(["experimentSelect", "scanSelect"]);
       
-      // this makes a copy
-      var reqData = $.extend(true, {}, xnatview.config.authJson);
+      var reqData = {};
       reqData.project_name = project;
       reqData.subject_label = subject;
       
@@ -258,8 +254,7 @@ XnatView.prototype = {
    fetchScans: function(project, subject, experiment) {
       this._clearSelects(["scanSelect"]);
       
-      // this makes a copy
-      var reqData = $.extend(true, {}, xnatview.config.authJson);
+      var reqData = {};
       reqData.project_name = project;
       reqData.subject_label = subject;
       reqData.experiment_label = experiment;

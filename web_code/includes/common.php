@@ -54,7 +54,7 @@ function getXnatViewOptions() {
       if( !is_array($auth) ) {
          $auth = array_fill_keys(array('user', 'pass', 'server'), '');
       }
-      $xnatview_path = $base_url . '../python/xnat_view_script.py';
+      $xnatview_path = $base_url . '../python/xnatview_backend.py';
       
       // pass server options to included javascript
       $xnatview = array(
@@ -64,12 +64,8 @@ function getXnatViewOptions() {
         'experimentUrl' => "$xnatview_path/get_experiments",
         'scanUrl' => "$xnatview_path/get_scans",
         'dicomUrl' => "$xnatview_path/get_dicom_scans",
+        'authUrl' => "$xnatview_path/authenticate",
         'scanGalleryUrl' => $base_url . 'scan_gallery.php',
-        'authJson' => array(
-         'username' => $auth['user'],
-         'password' => $auth['pass'],
-         'instance' => $auth['server'],
-        ),
        ),
       );
    }
