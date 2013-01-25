@@ -27,8 +27,17 @@ sudo apt-get install python-pyxnat
 ### dcm2pnm is another dependency-- used to transcode the dcm files to something I can use on the web
 ### this is part of the dcmtk toolkit
 sudo apt-get install libdcmtk2
+sudo apt-get install php5-curl
 
 
+### must enable curl support in php as well
+#e CURL extension ext/curl is not installed or enabled in your PHP installation. Check the manual for information on how to install or enable CURL on your system.
+# on ubuntu
+sudo nano /etc/php5/apache2/php.ini
+ nano /etc/php5/apache2/php.ini 
+[sudo] password for dagutman: 
+dagutman@sideshowbob:~$ sudo apt-get install curl libcurl3 libcurl3-dev php5-curl
+Reading package lists... Done
 
 
 
