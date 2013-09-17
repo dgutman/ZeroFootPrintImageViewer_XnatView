@@ -17,12 +17,19 @@ sudo apt-get update  ### get latest set of packages
 sudo apt-get upgrade # install new packages-- then rebooted
 sudo reboot ## just to apply any kernel patches
 
-sudo apt-get install openssh-server 
-sudo apt-get install php5 apache2 
-sudo apt-get install libapache2-mod-python
+
+
+sudo apt-get install open-vm-toolbox
+sudo apt-get install php5 apache2  libapache2-mod-python openssh-server
+#I installed apache2 and openssh-server during the VM install, but can install like this as well
+#also installing open-vm-tools for vmware, not necessary on bare steel installs
+
 
 ### need to install pyxnat-- two options are available.... can build from source or install from repo
-sudo apt-get install python-pyxnat
+#sudo apt-get install python-pyxnat
+# I recommend install from source control, as their are a number of bug fixes
+
+
 
 ### dcm2pnm is another dependency-- used to transcode the dcm files to something I can use on the web
 ### this is part of the dcmtk toolkit
